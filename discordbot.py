@@ -77,7 +77,6 @@ async def setup(ctx, num_of_player_param=None, num_of_secret_voice_channel_param
 
     logging.info(audience_text_channel_permission)
     await audience_channel.edit(overwrites=audience_text_channel_permission)
-    await audience_channel.edit(overwrites=audience_text_channel_permission)
 
     # ボイスチャンネル作成
     for i in range(num_of_secret_voice_channel):
