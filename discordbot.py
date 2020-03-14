@@ -34,6 +34,13 @@ async def neko(ctx):
 
 @bot.command()
 @commands.has_permissions(administrator=True)
+async def cleanup(ctx):
+    await ctx.channel.purge()
+    await ctx.send('塵一つ残らないね！')
+
+
+@bot.command()
+@commands.has_permissions(administrator=True)
 async def setup(ctx, num_of_player_param=None, num_of_secret_voice_channel_param="3"):
     if isinstance(num_of_player_param, str) and num_of_player_param.isdigit():
         num_of_player = int(num_of_player_param)
