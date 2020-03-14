@@ -1,12 +1,11 @@
 from discord.ext import commands
 import os
-import sys
-import traceback
 import logging
 import discord
 
 bot = commands.Bot(command_prefix='/')
 token = os.environ['DISCORD_BOT_TOKEN']
+
 
 async def say(ctx, message):
     logging.info(message)
@@ -22,13 +21,16 @@ async def say(ctx, message):
 def find_by_name(items, names):
     return next(filter(lambda item: item.name in names, items))
 
+
 @bot.command()
 async def ping(ctx):
     await ctx.send('pong')
 
+
 @bot.command()
 async def neko(ctx):
     await say(ctx, 'にゃーん')
+
 
 @bot.command()
 @commands.has_permissions(administrator=True)
@@ -48,14 +50,17 @@ async def setup(ctx, num_of_player_param=None, num_of_secret_voice_channel_param
     guild = ctx.guild
 
     text_ok = discord.PermissionOverwrite(read_messages=True, send_messages=True, send_tts_messages=True,
-                                        manage_messages=True, attach_files=True, read_message_history=True, embed_links=True)
+                                          manage_messages=True, attach_files=True, read_message_history=True, embed_links=True)
     text_ng = discord.PermissionOverwrite(read_messages=False, send_messages=False, send_tts_messages=False,
-                                       manage_messages=False, attach_files=False, read_message_history=False)
+                                          manage_messages=False, attach_files=False, read_message_history=False)
     text_read_only = discord.PermissionOverwrite(read_messages=True, send_messages=False, send_tts_messages=False,
-                                       manage_messages=False, attach_files=False, read_message_history=True)
-    voice_ok = discord.PermissionOverwrite(view_channel=True, connect=True, speak=True)
-    voice_ng = discord.PermissionOverwrite(view_channel=False, connect=False, speak=False)
-    voice_listen_only = discord.PermissionOverwrite(view_channel=True, connect=True, speak=False)
+                                                 manage_messages=False, attach_files=False, read_message_history=True)
+    voice_ok = discord.PermissionOverwrite(
+        view_channel=True, connect=True, speak=True)
+    voice_ng = discord.PermissionOverwrite(
+        view_channel=False, connect=False, speak=False)
+    voice_listen_only = discord.PermissionOverwrite(
+        view_channel=True, connect=True, speak=False)
 
     # カテゴリ取得
     text_category = find_by_name(
@@ -69,7 +74,6 @@ async def setup(ctx, num_of_player_param=None, num_of_secret_voice_channel_param
     voice_general = find_by_name(
         voice_category.channels, ['一般', 'general']
     )
-
 
     # テキストチャンネル作成
     await text_category.create_text_channel("雑談")
