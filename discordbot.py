@@ -41,7 +41,7 @@ async def cleanup(ctx):
 
 @bot.command()
 @commands.has_permissions(administrator=True)
-async def setup(ctx, num_of_player_param=None, num_of_secret_voice_channel_param="3"):
+async def setup(ctx, num_of_player_param=None, num_of_secret_voice_channel_param="1"):
     if isinstance(num_of_player_param, str) and num_of_player_param.isdigit():
         num_of_player = int(num_of_player_param)
     else:
