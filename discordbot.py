@@ -119,7 +119,7 @@ async def setup(ctx, num_of_player_param=None, num_of_secret_voice_channel_param
     await voice_category.create_voice_channel("雑談")
     await voice_category.create_voice_channel("観戦者雑談", overwrites=audience_voice_channel_permission)
 
-    await say(ctx, 'setup finished')
+    await say(ctx, 'I done it.')
 
 logging.info('start')
 bot.run(token)
