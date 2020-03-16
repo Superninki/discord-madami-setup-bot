@@ -28,6 +28,11 @@ async def ping(ctx):
 
 
 @bot.command()
+async def pid(ctx):
+    await ctx.send(os.getpid())
+
+
+@bot.command()
 async def neko(ctx):
     await say(ctx, 'にゃーん')
 
