@@ -4,6 +4,9 @@ import logging
 import discord
 import re
 import random
+import asyncio
+import time
+import math
 
 bot = commands.Bot(command_prefix='/')
 token = os.environ['DISCORD_BOT_TOKEN']
@@ -12,6 +15,62 @@ token = os.environ['DISCORD_BOT_TOKEN']
 async def say(ctx, message):
     logging.info(message)
     await ctx.send(message)
+
+def timer_id(ctx):
+    return ctx.guild.id
+
+timers = {}
+
+
+def parse_rest_time(timestr):
+    result = re.match(r'([\d\.]+)\s*(m(in)?)?', timestr)
+    return int(result[1])
+
+def next_minute(current_minute):
+  n = 0
+  if (current_minute > 10):
+    n = math.floor((current_minute - 1) / 10) * 10
+  elif (current_minute > 5):
+    n = 5
+  elif (current_minute > 3):
+    n = 3
+  else:
+    n = current_minute - 1
+  return n
+
+
+@bot.command()
+@commands.has_permissions(administrator=True)
+async def timer(ctx, arg=None):
+    global timers
+    tid = timer_id(ctx)
+
+    if arg == "stop":
+        timers[tid].close()
+        del timers[tid]
+        await say(ctx, "タイマーを停止しました")
+    else:
+        if tid in timers:
+            await say(ctx, "すでにスタートしています")
+        else:
+            minute = parse_rest_time(arg or "10")
+            target_time = time.time() + minute * 60
+
+            nm = next_minute(minute)
+            await say(ctx, "タイマースタート")
+            while True:
+                timers[tid] = asyncio.sleep(target_time - time.time() - nm * 60)
+                await timers[tid]
+                if nm > 0:
+                    msg = f"@here 残り{nm}分です!"
+                    await say(ctx, msg)
+                    nm = next_minute(nm)
+                else:
+                    await say(ctx, "@here タイマー終了!")
+                    await ctx.send("...時間です", tts=True)
+                    del timers[tid]
+                    break
+
 
 
 # @bot.event
