@@ -2,6 +2,8 @@ from discord.ext import commands
 import os
 import logging
 import discord
+import re
+import random
 
 bot = commands.Bot(command_prefix='/')
 token = os.environ['DISCORD_BOT_TOKEN']
@@ -20,6 +22,24 @@ async def say(ctx, message):
 
 def find_by_name(items, names):
     return next(filter(lambda item: item.name in names, items))
+
+@bot.event
+async def on_message(message):
+    if message.author == bot.user:
+        return
+    result = re.match(r'^\/(\d{1,2})[dD](\d{1,3})$', message.content)
+    if result:
+        n = int(result[1])
+        d = int(result[2])
+
+        ds =  [random.randint(1,d) for _ in range(n)]
+        total = sum(ds)
+        if n == 1:
+            await message.channel.send(total)
+        else:
+            await message.channel.send(f"{'+'.join([str(v) for v in ds])} = {total}")
+
+    await bot.process_commands(message)
 
 
 @bot.command()
