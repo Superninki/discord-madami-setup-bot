@@ -41,6 +41,12 @@ async def on_message(message):
 
     await bot.process_commands(message)
 
+@bot.event
+async def on_ready():
+    server_id = os.environ.get('DEPLOY_NOTIFY', None)
+    if server_id:
+        await bot.get_guild(int(server_id)).text_channels[0].send("Deploy done.")
+
 
 @bot.command()
 async def ping(ctx):
