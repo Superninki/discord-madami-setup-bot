@@ -37,7 +37,7 @@ async def on_message(message):
         if n == 1:
             await message.channel.send(total)
         else:
-            await message.channel.send(f"{'+'.join([str(v) for v in ds])} = {total}")
+            await message.channel.send(f"{' + '.join([str(v) for v in ds])} = {total}")
 
     await bot.process_commands(message)
 
