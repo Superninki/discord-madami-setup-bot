@@ -61,7 +61,7 @@ async def neko(ctx):
 @commands.has_permissions(administrator=True)
 async def cleanup(ctx):
     await ctx.channel.purge(limit=1000)
-    await ctx.send('ログを消去しました')
+    await ctx.send('I done it.')
 
 
 @bot.command()
