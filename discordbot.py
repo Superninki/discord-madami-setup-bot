@@ -185,7 +185,7 @@ async def setup(ctx, num_of_player_param=None, num_of_secret_voice_channel_param
     text_general_permission = {guild.default_role: text_read_only}
     voice_general_permission = {guild.default_role: voice_listen_only}
     # ロールと個人チャンネル作成
-    await guild.create_role(name="GM", color=discord.Color.red(), permissions=gm_permission)
+    await guild.create_role(name="GM", color=discord.Color.dark_magenta(), permissions=gm_permission)
     for i in range(num_of_player):
         role = await guild.create_role(name=f"PL{i+1}", color=discord.Color.blue(), permissions=default_permission)
         await text_category.create_text_channel(f"{i+1}", overwrites={
