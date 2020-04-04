@@ -7,6 +7,8 @@ import random
 import asyncio
 import time
 import math
+import signal
+import sys
 
 bot = commands.Bot(command_prefix='/')
 token = os.environ['DISCORD_BOT_TOKEN']
@@ -104,7 +106,14 @@ async def on_message(message):
 async def on_ready():
     server_id = os.environ.get('DEPLOY_NOTIFY', None)
     if server_id:
-        await bot.get_guild(int(server_id)).text_channels[0].send("Deploy done.")
+        await bot.get_guild(int(server_id)).text_channels[0].send(f"Ready. PID: {os.getpid()}")
+
+
+async def on_sigterm(signum, frame):
+    server_id = os.environ.get('DEPLOY_NOTIFY', None)
+    if server_id:
+        await bot.get_guild(int(server_id)).text_channels[0].send(f"Caught SIGTERM. PID: {os.getpid()}")
+    sys.exit()
 
 
 @bot.command()
@@ -211,5 +220,5 @@ async def setup(ctx, num_of_player_param=None, num_of_secret_voice_channel_param
 
     await say(ctx, 'I done it.')
 
-logging.info('start')
+signal.signal(signal.SIGTERM, on_sigterm)
 bot.run(token)
