@@ -102,11 +102,28 @@ async def on_message(message):
 
     await bot.process_commands(message)
 
-@bot.event
-async def on_ready():
+
+async def notify(msg):
+    global connected_at
     server_id = os.environ.get('DEPLOY_NOTIFY', None)
     if server_id:
-        await bot.get_guild(int(server_id)).text_channels[0].send(f"Ready. PID: {os.getpid()}")
+        await bot.get_guild(int(server_id)).text_channels[0].send(f"{msg}. PID: {os.getpid()}, Connected: {time.time() - connected_at}")
+
+
+@bot.event
+async def on_ready():
+    await notify("Ready")
+
+
+@bot.event
+async def on_resumed():
+    await notify("Resumed")
+
+
+@bot.event
+async def on_connect():
+    global connected_at
+    connected_at = time.time()
 
 
 async def on_sigterm(signum, frame):
