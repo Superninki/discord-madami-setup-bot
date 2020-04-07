@@ -22,6 +22,7 @@ def timer_id(ctx):
     return ctx.guild.id
 
 timers = {}
+started_at = time.time()
 
 
 def parse_rest_time(timestr):
@@ -104,10 +105,11 @@ async def on_message(message):
 
 
 async def notify(msg):
-    global connected_at
+    global connected_at, started_at
     server_id = os.environ.get('DEPLOY_NOTIFY', None)
     if server_id:
-        await bot.get_guild(int(server_id)).text_channels[0].send(f"{msg}. PID: {os.getpid()}, Connected: {time.time() - connected_at}")
+        await bot.get_guild(int(server_id)).text_channels[0].send(
+            f"{msg}. PID: {os.getpid()}, Connected: {time.time() - connected_at}, Running: {time.time() - started_at}")
 
 
 @bot.event
