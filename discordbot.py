@@ -45,6 +45,7 @@ def next_minute(current_minute):
 @bot.command()
 @commands.has_permissions(administrator=True)
 async def timer(ctx, arg=None):
+    await notify("timer")
     global timers
     tid = timer_id(ctx)
 
@@ -91,6 +92,7 @@ async def on_message(message):
         return
     result = re.match(r'^\/(\d{1,2})[dD](\d{1,3})$', message.content)
     if result:
+        await notify("roll")
         n = int(result[1])
         d = int(result[2])
 
@@ -105,21 +107,26 @@ async def on_message(message):
 
 
 async def notify(msg):
+    server_id = os.environ.get('DEPLOY_NOTIFY', None)
+    if server_id:
+        await bot.get_guild(int(server_id)).text_channels[0].send(msg)
+
+async def notify_with_sysinfo(msg):
     global connected_at, started_at
     server_id = os.environ.get('DEPLOY_NOTIFY', None)
     if server_id:
-        await bot.get_guild(int(server_id)).text_channels[0].send(
+        await notify(
             f"{msg}. PID: {os.getpid()}, Connected: {time.time() - connected_at}, Running: {time.time() - started_at}")
 
 
 @bot.event
 async def on_ready():
-    await notify("Ready")
+    await notify_with_sysinfo("Ready")
 
 
 @bot.event
 async def on_resumed():
-    await notify("Resumed")
+    await notify_with_sysinfo("Resumed")
 
 
 @bot.event
@@ -153,6 +160,7 @@ async def neko(ctx):
 @bot.command()
 @commands.has_permissions(administrator=True)
 async def cleanup(ctx):
+    await notify("cleanup")
     await ctx.channel.purge(limit=1000)
     await ctx.send('I done it.')
 
@@ -160,6 +168,7 @@ async def cleanup(ctx):
 @bot.command()
 @commands.has_permissions(administrator=True)
 async def setup(ctx, num_of_player_param=None, num_of_secret_voice_channel_param="1"):
+    await notify("setup")
     if isinstance(num_of_player_param, str) and num_of_player_param.isdigit():
         num_of_player = int(num_of_player_param)
     else:
