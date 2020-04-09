@@ -95,13 +95,14 @@ async def on_message(message):
         await notify("roll")
         n = int(result[1])
         d = int(result[2])
+        prefix = f"{message.author.mention} {n}d{d} →"
 
         ds =  [random.randint(1,d) for _ in range(n)]
         total = sum(ds)
         if n == 1:
-            await message.channel.send(total)
+            await message.channel.send(f"{prefix} {total}")
         else:
-            await message.channel.send(f"{' + '.join([str(v) for v in ds])} = {total}")
+            await message.channel.send(f"{prefix} {' + '.join([str(v) for v in ds])} = {total}")
 
     await bot.process_commands(message)
 
