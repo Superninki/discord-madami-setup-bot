@@ -9,6 +9,7 @@ import time
 import math
 import signal
 import sys
+from datetime import timedelta
 
 bot = commands.Bot(command_prefix='/')
 token = os.environ['DISCORD_BOT_TOKEN']
@@ -107,6 +108,9 @@ async def on_message(message):
     await bot.process_commands(message)
 
 
+def format_elapsed(sec):
+    return str(timedelta(seconds=(time.time() - sec)))
+
 async def notify(msg):
     server_id = os.environ.get('DEPLOY_NOTIFY', None)
     if server_id:
@@ -117,7 +121,7 @@ async def notify_with_sysinfo(msg):
     server_id = os.environ.get('DEPLOY_NOTIFY', None)
     if server_id:
         await notify(
-            f"{msg}. PID: {os.getpid()}, Connected: {time.time() - connected_at}, Running: {time.time() - started_at}")
+            f"{msg}. PID: {os.getpid()}, Connected: {format_elapsed(connected_at)}, Running: {format_elapsed(started_at)}")
 
 
 @bot.event
