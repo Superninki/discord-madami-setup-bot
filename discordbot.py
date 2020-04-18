@@ -45,7 +45,7 @@ def next_minute(current_minute):
 
 @bot.command()
 @commands.has_permissions(administrator=True)
-async def timer(ctx, arg=None):
+async def timer(ctx, arg):
     await notify("timer")
     global timers
     tid = timer_id(ctx)
@@ -58,7 +58,7 @@ async def timer(ctx, arg=None):
         if tid in timers:
             await say(ctx, "すでにスタートしています")
         else:
-            minute = parse_rest_time(arg or "10")
+            minute = parse_rest_time(arg)
             target_time = time.time() + minute * 60
 
             nm = next_minute(minute)
