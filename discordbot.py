@@ -140,13 +140,6 @@ async def on_connect():
     connected_at = time.time()
 
 
-async def on_sigterm(signum, frame):
-    server_id = os.environ.get('DEPLOY_NOTIFY', None)
-    if server_id:
-        await bot.get_guild(int(server_id)).text_channels[0].send(f"Caught SIGTERM. PID: {os.getpid()}")
-    sys.exit()
-
-
 @bot.command()
 async def ping(ctx):
     await ctx.send('pong')
@@ -252,5 +245,4 @@ async def setup(ctx, num_of_player_param=None, num_of_secret_voice_channel_param
 
     await say(ctx, 'I done it.')
 
-signal.signal(signal.SIGTERM, on_sigterm)
 bot.run(token)
