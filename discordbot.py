@@ -112,7 +112,7 @@ async def on_guild_join(guild):
     server_id = os.environ.get('DEPLOY_NOTIFY', None)
     if server_id:
         await notify(
-            f"Guild count: {len(client.guilds)}")
+            f"Guild count: {len(bot.guilds)}")
 
 
 def format_elapsed(sec):
