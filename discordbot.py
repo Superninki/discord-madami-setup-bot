@@ -107,6 +107,13 @@ async def on_message(message):
 
     await bot.process_commands(message)
 
+@bot.event
+async def on_guild_join(guild):
+    server_id = os.environ.get('DEPLOY_NOTIFY', None)
+    if server_id:
+        await notify(
+            f"Guild count: {len(client.guilds)}")
+
 
 def format_elapsed(sec):
     return str(timedelta(seconds=(time.time() - sec)))
